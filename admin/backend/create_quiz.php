@@ -12,52 +12,62 @@
 		$stmt2 = "SELECT * FROM multiple WHERE quiz_id=? AND topic_id=?";
 		$stmt3 = "SELECT * FROM tf WHERE quiz_id=? AND topic_id=?";
 		$get_single = mysqli_prepare($con, $stmt);
-		mysqli_stmt_bind_param($get_single, 'ss', $quiz, $topic);
-		mysqli_execute($get_single);
-		$result = mysqli_stmt_get_result($get_single);
-		
-		if($result)
+		if($get_single)
 		{
-			if(mysqli_num_rows($result) > 0)
+			mysqli_stmt_bind_param($get_single, 'ss', $quiz, $topic);
+			mysqli_execute($get_single);
+			$result = mysqli_stmt_get_result($get_single);
+			
+			if($result)
 			{
-				while($row = mysqli_fetch_assoc($result))
+				if(mysqli_num_rows($result) > 0)
 				{
-					array_push($data, $row);
-				}
+					while($row = mysqli_fetch_assoc($result))
+					{
+						array_push($data, $row);
+					}
 
+				}
 			}
 		}
-		$get_multiple = mysqli_prepare($con, $stmt2);
-		mysqli_stmt_bind_param($get_multiple, 'ss', $quiz, $topic);
-		mysqli_execute($get_multiple);
-		$result = mysqli_stmt_get_result($get_multiple);
-		if($result)
-		{
-			if(mysqli_num_rows($result) > 0)
-			{
-				while($row = mysqli_fetch_assoc($result))
-				{
-					$answer = $row['answer'];
-					explode(",", $answer);
-					$row['answer'] = $answer;
-					array_push($data, $row);
-				}
 
+		$get_multiple = mysqli_prepare($con, $stmt2);
+		if($get_multiple)
+		{
+			mysqli_stmt_bind_param($get_multiple, 'ss', $quiz, $topic);
+			mysqli_execute($get_multiple);
+			$result = mysqli_stmt_get_result($get_multiple);
+			if($result)
+			{
+				if(mysqli_num_rows($result) > 0)
+				{
+					while($row = mysqli_fetch_assoc($result))
+					{
+						$answer = $row['answer'];
+						explode(",", $answer);
+						$row['answer'] = $answer;
+						array_push($data, $row);
+					}
+
+				}
 			}
 		}
 		$get_tf = mysqli_prepare($con, $stmt3);
-		mysqli_stmt_bind_param($get_tf, 'ss', $quiz, $topic);
-		mysqli_execute($get_tf);
-		$result = mysqli_stmt_get_result($get_tf);
-		if($result)
+		if($get_tf)
 		{
-			if(mysqli_num_rows($result) > 0)
+			mysqli_stmt_bind_param($get_tf, 'ss', $quiz, $topic);
+			mysqli_execute($get_tf);
+			$result = mysqli_stmt_get_result($get_tf);
+			if($result)
 			{
-				while($row = mysqli_fetch_assoc($result))
+				if(mysqli_num_rows($result) > 0)
 				{
-					array_push($data, $row);
-				}
+					while($row = mysqli_fetch_assoc($result))
+					{
+						array_push($data, $row);
+					}
 
+				}
 			}
 		}
 		if(count($data) == 0)
@@ -107,7 +117,7 @@
 				}
 				else
 				{
-					$res = array("status" => "error");
+					$res = array("status" => mysqli_error($con));
 				}
 			}
 			else if(mysqli_num_rows($check) > 0)

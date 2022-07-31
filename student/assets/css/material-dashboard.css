@@ -22082,14 +22082,28 @@ fieldset[disabled][disabled] .dark-edition .has-error .form-control,
   background:  linear-gradient(60deg, #288c6c, #4ea752) !important;
 }
 .color-green{
-  color:  linear-gradient(60deg, #288c6c, #4ea752) !important;
+  color:  #4ea752 !important;
 }
-
+.yellow{
+  background: #ddd82f !important;
+}
+.color-yellow{
+  color: #ddd82f !important;
+}
 .border-red{
   border:  1px solid #ff0000;
 }
 .borderbottom-red{
   border-bottom:  1px solid #ff0000;
+}
+.color-red{
+  color:  #ff0000 !important;
+}
+.dark{
+  background: #1a2035 !important;
+}
+.color-dark{
+  color: #1a2035 !important;
 }
 
 

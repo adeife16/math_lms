@@ -98,7 +98,7 @@ function deleteQuiz(id){
 	.done(function(res){
 		$("#delete-confirm").removeAttr("disabled");
 		let data = JSON.parse(res);
-		if(data.status === "success"){
+		if(data.status === "success"){	
 			alert_success("Quiz has been deleted");
 			getQuizes();
 		}
