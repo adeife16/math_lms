@@ -53,8 +53,15 @@
   	}
     else
     {
-        $res = array("status" => "end");
-        print json_encode($res);
+        $topic_index = array();
+        $get_topic_index = mysqli_query($con, "SELECT id FROM topics WHERE course_id = '$current_course' ORDER BY id ASC");
+        while($row = mysqli_fetch_assoc($get_topic_index))
+        {
+          array_push($topic_index, [$row['topic_id'] => $row['id']]);
+        }
+        // $update = mysqli_query($con, "UPDATE course_enroll SET progress = '$current'"
+        // $res = array("status" => "end");
+        print json_encode($topic_index);
     }
   }
 

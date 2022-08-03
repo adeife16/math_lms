@@ -52,6 +52,12 @@
             </a>
           </li>
           <li class="nav-item ">
+            <a class="nav-link" href="exams.php">
+              <i class="icon ion-ios-paper-outline"></i>
+              <p>Examination</p>
+            </a>
+          </li>
+          <li class="nav-item ">
             <div class="dd nav-link">
               <div class="dd-a"><span><i class="icon ion-ios-list-outline"></i>Enrolled</span></div>
               <input type="checkbox">

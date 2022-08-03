@@ -107,6 +107,15 @@
         <script type="text/javascript" src="ajax/create_quiz.js"></script>
         <script type="text/javascript" src="js/create_quiz.js"></script>
     <?php endif ?>
+    <?php if ($title == "Exams"): ?>
+        <script type="text/javascript" src="ajax/exams.js"></script>
+        <script type="text/javascript" src="js/exams.js"></script>
+    <?php endif ?>
+    <?php if ($title == "Create Exams"): ?>
+        <script type="text/javascript" src="js/md5.min.js"></script>
+        <script type="text/javascript" src="ajax/create_exam.js"></script>
+        <script type="text/javascript" src="js/create_exam.js"></script>
+    <?php endif ?>
     <!-- Page level plugins -->
 
     <!-- Page level custom scripts -->

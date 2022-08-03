@@ -20,4 +20,5 @@ function showScore(score){
     }
 
     $("#result").html(score+'%');
+    $("#retake").html(`<a href="quiz.php?topic_id=`+topic_id+`">Retake Quiz</a>`);
 }

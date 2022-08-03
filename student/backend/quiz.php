@@ -60,12 +60,16 @@
     {
         $ans = $_POST['submit'];
         $topic_id = $_POST['topic'];
+        $matric = $_SESSION['matric'];
 
         $keys = array_keys($ans);
         $values = array_values($ans);
         $score = 0;
         $total_question = count($keys);
 
+        $check_exist = mysqli_query($con, "SELECT * FROM quiz_score WHERE matric = '$matric' AND topic_id = '$topic_id'");
+        $exist = mysqli_num_rows($check_exist);
+        
 
         for($i=0; $i<$total_question; $i++)
         {
@@ -113,14 +117,23 @@
             } 
         }
 
-        $matric = $_SESSION['matric'];
         $percent = intval(($score / $total_question) * 100);
         $grade = grade($percent);
-        $save_score = mysqli_query($con, "INSERT INTO quiz_score(matric, total_question, score, percent, grade, topic_id, date_created) VALUES('$matric', '$total_question', '$score', '$percent', '$grade', '$topic_id',NOW() )");
-
+        if($exist == 1)
+        {
+            $save_score = mysqli_query($con, "UPDATE quiz_score SET total_question = '$total_question', score = '$score', percent = '$percent', grade = '$grade' WHERE  matric = '$matric' AND topic_id = '$topic_id'");
+        }
+        else
+        {
+            $save_score = mysqli_query($con, "INSERT INTO quiz_score(matric, total_question, score, percent, grade, topic_id, date_created) VALUES('$matric', '$total_question', '$score', '$percent', '$grade', '$topic_id',NOW() )");
+        }
         if($save_score)
         {
             $res = array("status" => "success", "topic" => $topic_id, "student" => $matric);
+        }
+        else
+        {
+            $res = array("status" => "error", "data" => mysqli_error($con));
         }
         print json_encode($res);
     }

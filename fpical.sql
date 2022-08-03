@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 20, 2022 at 01:43 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 7.4.29
+-- Host: 127.0.0.1
+-- Generation Time: Aug 02, 2022 at 01:13 PM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -451,6 +451,28 @@ INSERT INTO `department` (`id`, `dept_name`, `faculty`, `date_created`, `date_up
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `exam`
+--
+
+CREATE TABLE `exam` (
+  `id` int(11) NOT NULL,
+  `exam_id` varchar(50) NOT NULL,
+  `duration` int(11) NOT NULL,
+  `course` int(11) NOT NULL,
+  `date_created` date NOT NULL,
+  `date_updated` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `exam`
+--
+
+INSERT INTO `exam` (`id`, `exam_id`, `duration`, `course`, `date_created`, `date_updated`) VALUES
+(1, '931fdf0361bf977192fe03', 45, 1, '2022-08-02', '2022-08-02');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `faculty`
 --
 
@@ -519,7 +541,10 @@ INSERT INTO `logs` (`id`, `user_id`, `user_type`, `activity`, `date_created`) VA
 (29, '', 'student', 'Logged Out', '2022-06-13'),
 (30, 'H/CTE/19/0548', 'student', 'Logged In', '2022-06-13'),
 (31, '', 'student', 'Logged Out', '2022-06-16'),
-(32, 'H/CTE/19/0548', 'student', 'Logged In', '2022-06-16');
+(32, 'H/CTE/19/0548', 'student', 'Logged In', '2022-06-16'),
+(33, 'H/CTE/19/0548', 'student', 'Logged In', '2022-07-26'),
+(34, '', 'student', 'Logged Out', '2022-07-29'),
+(35, 'H/CTE/19/0548', 'student', 'Logged In', '2022-07-29');
 
 -- --------------------------------------------------------
 
@@ -530,27 +555,74 @@ INSERT INTO `logs` (`id`, `user_id`, `user_type`, `activity`, `date_created`) VA
 CREATE TABLE `multiple` (
   `id` int(11) NOT NULL,
   `question_id` varchar(50) NOT NULL,
-  `options` text NOT NULL,
-  `answer` int(11) NOT NULL,
-  `date_created` date NOT NULL
+  `question` text NOT NULL,
+  `type` varchar(11) NOT NULL,
+  `option1` text NOT NULL,
+  `option2` text NOT NULL,
+  `option3` text NOT NULL,
+  `option4` text NOT NULL,
+  `option5` text NOT NULL,
+  `quiz_id` varchar(50) NOT NULL,
+  `topic_id` varchar(50) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `answer` varchar(11) NOT NULL,
+  `date_created` date NOT NULL,
+  `date_updated` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `multiple`
+--
+
+INSERT INTO `multiple` (`id`, `question_id`, `question`, `type`, `option1`, `option2`, `option3`, `option4`, `option5`, `quiz_id`, `topic_id`, `course_id`, `answer`, `date_created`, `date_updated`) VALUES
+(1, '019d385eb67632a7e958e23f24bd07d7', 'awds', 'multiple', 'asdsd', 'eads', 'aerv', 'sdfvaew', 'sdffd', '2ff1089d5f2f7cbc1b1d60', '0660e6f3574d91881a', 1, 'A,C,E', '2022-07-29', '2022-07-29'),
+(2, '430c3626b879b4005d41b8a46172e0c0', 'SFSDF', 'multiple', 'SFDDF', 'SDFSB', 'sfdsd', 'sfsf', 'sfdv', '931fdf0361bf977192fe03', '80d22656a8ae320bac22d4', 1, 'B,C', '2022-08-02', '2022-08-02');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quiz_question`
+-- Table structure for table `quiz`
 --
 
-CREATE TABLE `quiz_question` (
+CREATE TABLE `quiz` (
   `id` int(11) NOT NULL,
-  `question_id` varchar(50) NOT NULL,
-  `question_type` enum('single','tf','multiple') NOT NULL,
-  `question` text NOT NULL,
-  `course_id` int(11) NOT NULL,
+  `quiz_id` varchar(50) NOT NULL,
+  `course` int(11) NOT NULL,
   `topic_id` varchar(50) NOT NULL,
   `date_created` date NOT NULL,
   `date_updated` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `quiz`
+--
+
+INSERT INTO `quiz` (`id`, `quiz_id`, `course`, `topic_id`, `date_created`, `date_updated`) VALUES
+(1, '2ff1089d5f2f7cbc1b1d60', 1, '0660e6f3574d91881a', '2022-07-26', '2022-07-26');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz_score`
+--
+
+CREATE TABLE `quiz_score` (
+  `id` int(11) NOT NULL,
+  `matric` varchar(20) NOT NULL,
+  `total_question` int(11) NOT NULL,
+  `score` int(11) NOT NULL,
+  `percent` float NOT NULL,
+  `grade` varchar(11) NOT NULL,
+  `topic_id` varchar(50) NOT NULL,
+  `date_created` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `quiz_score`
+--
+
+INSERT INTO `quiz_score` (`id`, `matric`, `total_question`, `score`, `percent`, `grade`, `topic_id`, `date_created`) VALUES
+(1, 'H/CTE/19/0548', 4, 4, 100, 'A', '0660e6f3574d91881a', '2022-08-01');
 
 -- --------------------------------------------------------
 
@@ -561,13 +633,28 @@ CREATE TABLE `quiz_question` (
 CREATE TABLE `single` (
   `id` int(11) NOT NULL,
   `question_id` varchar(50) NOT NULL,
+  `type` varchar(11) NOT NULL,
+  `question` text NOT NULL,
   `option1` varchar(200) NOT NULL,
   `option2` varchar(200) NOT NULL,
   `option3` varchar(200) NOT NULL,
   `option4` varchar(200) NOT NULL,
   `answer` varchar(200) NOT NULL,
+  `quiz_id` varchar(100) NOT NULL,
+  `topic_id` varchar(50) NOT NULL,
+  `course_id` int(11) NOT NULL,
   `date_created` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `single`
+--
+
+INSERT INTO `single` (`id`, `question_id`, `type`, `question`, `option1`, `option2`, `option3`, `option4`, `answer`, `quiz_id`, `topic_id`, `course_id`, `date_created`) VALUES
+(1, '07cdfd23373b17c6b337251c22b7ea57', 'single', 'The average of first 50 natural number.....', '25.30', '25.5', '25.00', '12.25', 'B', '2ff1089d5f2f7cbc1b1d60', '0660e6f3574d91881a', 1, '2022-07-26'),
+(2, 'd840cc5d906c3e9c84374c8919d2074e', 'single', 'Which of the following numbers gives 240 when added to its own square?', '15', '16', '18', '20', 'A', '2ff1089d5f2f7cbc1b1d60', '0660e6f3574d91881a', 1, '2022-07-26'),
+(3, '5737c6ec2e0716f3d8a7a5c4e0de0d9a', 'single', 'test', 'opt1', 'opt1', 'OPT1', 'OPA', 'B', '931fdf0361bf977192fe03', 'f1860968766753ddcd42ff', 1, '2022-08-02'),
+(5, 'cfee398643cbc3dc5eefc89334cacdc1', 'single', '\\(-2\\pm1^2\\exponentialE-4c\\)', 'adads', 'adsad', 'ada', 'adscad', 'A', '931fdf0361bf977192fe03', 'df99a6025da79b2adeda09', 1, '2022-08-02');
 
 -- --------------------------------------------------------
 
@@ -611,9 +698,25 @@ INSERT INTO `student` (`id`, `matric`, `fname`, `lname`, `email`, `password`, `l
 CREATE TABLE `tf` (
   `id` int(11) NOT NULL,
   `question_id` varchar(50) NOT NULL,
+  `question` text NOT NULL,
+  `type` varchar(11) NOT NULL,
   `answer` enum('true','false') NOT NULL,
-  `date_created` date NOT NULL
+  `quiz_id` varchar(50) NOT NULL,
+  `topic_id` varchar(50) NOT NULL,
+  `course_id` int(22) NOT NULL,
+  `date_created` date NOT NULL,
+  `date_updated` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tf`
+--
+
+INSERT INTO `tf` (`id`, `question_id`, `question`, `type`, `answer`, `quiz_id`, `topic_id`, `course_id`, `date_created`, `date_updated`) VALUES
+(1, 'f0e52b27a7a5d6a1a87373dffa53dbe5', 'Set have unique elements', 'tf', 'true', '2ff1089d5f2f7cbc1b1d60', '0660e6f3574d91881a', 1, '2022-07-30', '2022-07-30'),
+(2, '428fca9bc1921c25c5121f9da7815cde', 'asdads', 'tf', 'false', '931fdf0361bf977192fe03', '44a3a5eafa746c6dd45a72', 1, '2022-08-02', '2022-08-02'),
+(3, 'ca9c267dad0305d1a6308d2a0cf1c39c', 'aewadsa', 'tf', 'true', '931fdf0361bf977192fe03', '959e5b2ab16b29d5efe4cb', 1, '2022-08-02', '2022-08-02'),
+(4, '6512bd43d9caa6e02c990b0a82652dca', 'adsadssdfsfd', 'tf', 'true', '931fdf0361bf977192fe03', '2c8c95d2feeaa9ee28caf5', 1, '2022-08-02', '2022-08-02');
 
 -- --------------------------------------------------------
 
@@ -691,6 +794,12 @@ ALTER TABLE `department`
   ADD UNIQUE KEY `dept_name` (`dept_name`);
 
 --
+-- Indexes for table `exam`
+--
+ALTER TABLE `exam`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `faculty`
 --
 ALTER TABLE `faculty`
@@ -710,9 +819,15 @@ ALTER TABLE `multiple`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `quiz_question`
+-- Indexes for table `quiz`
 --
-ALTER TABLE `quiz_question`
+ALTER TABLE `quiz`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `quiz_score`
+--
+ALTER TABLE `quiz_score`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -784,6 +899,12 @@ ALTER TABLE `department`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `exam`
+--
+ALTER TABLE `exam`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
@@ -793,25 +914,31 @@ ALTER TABLE `faculty`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `multiple`
 --
 ALTER TABLE `multiple`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `quiz_question`
+-- AUTO_INCREMENT for table `quiz`
 --
-ALTER TABLE `quiz_question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `quiz`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `quiz_score`
+--
+ALTER TABLE `quiz_score`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `single`
 --
 ALTER TABLE `single`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `student`
@@ -823,7 +950,7 @@ ALTER TABLE `student`
 -- AUTO_INCREMENT for table `tf`
 --
 ALTER TABLE `tf`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `topics`
