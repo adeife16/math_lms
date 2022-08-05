@@ -88,6 +88,10 @@
     <script src="ajax/quiz.js"></script>
     <script src="assets/js/pages/quiz.js"></script>
   <?php endif; ?>
+  <?php if($title == "End Quiz"): ?>
+    <script src="ajax/quiz_end.js"></script>
+    <script src="assets/js/pages/quiz_end.js"></script>
+  <?php endif; ?>
   
 </body>
 

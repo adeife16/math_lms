@@ -77,7 +77,11 @@ function showQuiz(data){
                                 <span>`+data[j].option4+`</span>
                             </p>
                             <p class="mt-3 p-3">
+<<<<<<< HEAD
                                 <input type="checkbox" name="answer-`+(j+1)+`-option" id="E-`+(j+1)+`" value="D">
+=======
+                                <input type="checkbox" name="answer-`+(j+1)+`-option" id="E-`+(j+1)+`" value="E">
+>>>>>>> 2ff717242918146820968b2f0e6dd1606f95c20d
                                 <span>`+data[j].option5+`</span>
                             </p>
                         </div>
@@ -141,6 +145,10 @@ for(let i=1; i<=total; i++){
     if(answer === undefined || answer === null || answer.length === 0){
         $("#btn-"+i).removeClass("green")
         $("#btn-"+i).addClass("btn-danger")
+<<<<<<< HEAD
+=======
+        answer = "";
+>>>>>>> 2ff717242918146820968b2f0e6dd1606f95c20d
     }
     else{
         $("#btn-"+i).removeClass("btn-danger")        

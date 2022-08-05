@@ -4,7 +4,7 @@
 	// get quiz questions
 	if($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['quiz']))
 	{
-		$quiz = $_GET['quiz'];
+		$exam = $_GET['quiz'];
 		$topic = $_GET['topic'];
 
 		
@@ -14,7 +14,7 @@
 		$get_single = mysqli_prepare($con, $stmt);
 		if($get_single)
 		{
-			mysqli_stmt_bind_param($get_single, 'ss', $quiz, $topic);
+			mysqli_stmt_bind_param($get_single, 'ss', $exam, $topic);
 			mysqli_execute($get_single);
 			$result = mysqli_stmt_get_result($get_single);
 			
@@ -34,7 +34,7 @@
 		$get_multiple = mysqli_prepare($con, $stmt2);
 		if($get_multiple)
 		{
-			mysqli_stmt_bind_param($get_multiple, 'ss', $quiz, $topic);
+			mysqli_stmt_bind_param($get_multiple, 'ss', $exam, $topic);
 			mysqli_execute($get_multiple);
 			$result = mysqli_stmt_get_result($get_multiple);
 			if($result)
@@ -55,7 +55,7 @@
 		$get_tf = mysqli_prepare($con, $stmt3);
 		if($get_tf)
 		{
-			mysqli_stmt_bind_param($get_tf, 'ss', $quiz, $topic);
+			mysqli_stmt_bind_param($get_tf, 'ss', $exam, $topic);
 			mysqli_execute($get_tf);
 			$result = mysqli_stmt_get_result($get_tf);
 			if($result)
@@ -85,32 +85,31 @@
 
 // Save Quiz
 
-	if(isset($_POST['saveQuiz']) && $_POST['saveQuiz'] != "")
+	if(isset($_POST['saveExam']) && $_POST['saveExam'] != "")
 	{
-		$quiz = $_POST['saveQuiz'];
-		$type = $quiz['type'];
-		$quiz_id = $quiz['quiz_id'];
-		$topic_id = $quiz['topic_id'];
-		$course_id = $quiz['course'];
-
+		$exam = $_POST['saveExam'];
+		$type = $exam['type'];
+		$exam_id = $exam['exam_id'];
+		$course_id = $exam['course'];
+		$topic_id = substr(md5(time()), 10,50);
 
 		if($type == "single")
 		{
-			$question_id = $quiz['question_id'];
-			$question = $quiz['question'];
-			$option1 = $quiz['option1'];
-			$option2 = $quiz['option2'];
-			$option3 = $quiz['option3'];
-			$option4 = $quiz['option4'];
-			$answer = $quiz['answer'];
-			$type = $quiz['type'];
-			$check = mysqli_query($con, "SELECT * FROM single WHERE question_id = '$question_id' AND quiz_id = '$quiz_id' AND topic_id = '$topic_id'");
+			$question_id = $exam['question_id'];
+			$question = $exam['question'];
+			$option1 = $exam['option1'];
+			$option2 = $exam['option2'];
+			$option3 = $exam['option3'];
+			$option4 = $exam['option4'];
+			$answer = $exam['answer'];
+			$type = $exam['type'];
+			$check = mysqli_query($con, "SELECT * FROM single WHERE question_id = '$question_id' AND quiz_id = '$exam_id' AND course_id = '$course_id'");
 			// print(mysqli_num_rows($check));
 			if(mysqli_num_rows($check) == 0)
 			{
 				$stmt = "INSERT INTO single(question_id, type, question, option1, option2, option3, option4, answer, quiz_id, topic_id, course_id, date_created) VALUES(?,?,?,?,?,?,?,?,?,?,?, NOW())";
 				$create = mysqli_prepare($con, $stmt);
-				mysqli_stmt_bind_param($create, 'ssssssssssi', $question_id, $type, $question, $option1, $option2, $option3, $option4, $answer, $quiz_id, $topic_id, $course_id);
+				mysqli_stmt_bind_param($create, 'ssssssssssi', $question_id, $type, $question, $option1, $option2, $option3, $option4, $answer, $exam_id, $topic_id, $course_id);
 				if(mysqli_execute($create))
 				{
 					$res = array("status" => "success");
@@ -124,7 +123,7 @@
 			{
 				$stmt = "UPDATE single SET question = ?, option1 = ?, option2 = ?, option3 = ?, option4 = ?, answer = ?, date_created = NOW()  WHERE question_id = ? AND quiz_id = ?";
 				$update = mysqli_prepare($con, $stmt);
-				mysqli_stmt_bind_param($update, 'ssssssss', $question, $option1, $option2, $option3, $option4, $answer, $question_id, $quiz_id);
+				mysqli_stmt_bind_param($update, 'ssssssss', $question, $option1, $option2, $option3, $option4, $answer, $question_id, $exam_id);
 				if(mysqli_execute($update))
 				{
 					$res = array("status" => "success");
@@ -142,24 +141,24 @@
 		}
 		elseif ($type == "multiple")
 		{
-			$question_id = $quiz['question_id'];
-			$question = $quiz['question'];
-			$option1 = $quiz['option1'];
-			$option2 = $quiz['option2'];
-			$option3 = $quiz['option3'];
-			$option4 = $quiz['option4'];
-			$option5 = $quiz['option5'];
-			$answer = $quiz['answer'];
+			$question_id = $exam['question_id'];
+			$question = $exam['question'];
+			$option1 = $exam['option1'];
+			$option2 = $exam['option2'];
+			$option3 = $exam['option3'];
+			$option4 = $exam['option4'];
+			$option5 = $exam['option5'];
+			$answer = $exam['answer'];
 			$answer = implode(",", $answer);
 
 
-			$check = mysqli_query($con, "SELECT * FROM multiple WHERE question_id='$question_id' AND quiz_id='$quiz_id' AND topic_id='$topic_id'");
+			$check = mysqli_query($con, "SELECT * FROM multiple WHERE question_id='$question_id' AND quiz_id='$exam_id' AND course_id = '$course_id'");
 
 			if(mysqli_num_rows($check) == 0)
 			{
 				$stmt = "INSERT INTO multiple(question_id, question, type, option1, option2, option3, option4, option5, answer, quiz_id, topic_id, course_id, date_created, date_updated) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,NOW(),NOW())";
 				$create = mysqli_prepare($con, $stmt);
-				mysqli_stmt_bind_param($create, 'sssssssssssi', $question_id, $question, $type, $option1, $option2, $option3, $option4, $option5, $answer, $quiz_id, $topic_id, $course_id);
+				mysqli_stmt_bind_param($create, 'sssssssssssi', $question_id, $question, $type, $option1, $option2, $option3, $option4, $option5, $answer, $exam_id, $topic_id, $course_id);
 				if(mysqli_execute($create))
 				{
 					$res = array("status" => "success");
@@ -173,7 +172,7 @@
 			{
 				$stmt = "UPDATE multiple SET question = ?, option1 = ?, option2 = ?, option3 = ?, option4 = ?, option5 = ?, answer = ?, date_updated = NOW()  WHERE question_id = ? AND quiz_id = ?";
 				$update = mysqli_prepare($con, $stmt);
-				mysqli_stmt_bind_param($update, 'sssssssss', $question, $option1, $option2, $option3, $option4, $option5, $answer, $question_id, $quiz_id);
+				mysqli_stmt_bind_param($update, 'sssssssss', $question, $option1, $option2, $option3, $option4, $option5, $answer, $question_id, $exam_id);
 				if(mysqli_execute($update))
 				{
 					$res = array("status" => "success");
@@ -189,17 +188,18 @@
 		}
 		elseif ($type == "tf")
 		{
-			$question_id = $quiz['question_id'];
-			$question = $quiz['question'];
-			$answer = strval($quiz['answer']);
+			$question_id = $exam['question_id'];
+			$question = $exam['question'];
+			$answer = strval($exam['answer']);
 
-			$check = mysqli_query($con, "SELECT * FROM tf WHERE question_id='$question_id' AND quiz_id='$quiz_id' AND topic_id='$topic_id'");
+			$check = mysqli_query($con, "SELECT * FROM tf WHERE question_id='$question_id' AND quiz_id='$exam_id' AND course_id = '$course_id'");
+
 
 			if(mysqli_num_rows($check) == 0)
 			{
 				$stmt = "INSERT INTO tf(question_id, type, question, answer, quiz_id, topic_id, course_id, date_created, date_updated) VALUES(?,?,?,?,?,?,?,NOW(),NOW())";
 				$create = mysqli_prepare($con, $stmt);
-				mysqli_stmt_bind_param($create, 'ssssssi', $question_id, $type, $question, $answer, $quiz_id, $topic_id, $course_id);
+				mysqli_stmt_bind_param($create, 'ssssssi', $question_id, $type, $question, $answer, $exam_id, $topic_id, $course_id);
 				if(mysqli_execute($create))
 				{
 					$res = array("status" => "success");
@@ -213,7 +213,7 @@
 			{
 				$stmt = "UPDATE tf SET question = ?, answer = ?, date_updated = NOW() WHERE question_id = ? AND quiz_id = ?";
 				$update = mysqli_prepare($con, $stmt);
-				mysqli_stmt_bind_param($update, 'ssss', $question, $answer, $question_id, $quiz_id);
+				mysqli_stmt_bind_param($update, 'ssss', $question, $answer, $question_id, $exam_id);
 				if(mysqli_execute($update))
 				{
 					$res = array("status" => "success");
@@ -223,7 +223,7 @@
 					$res = array("status" => "error");
 				}
 			}
-
+			print mysqli_error($con);
 			print json_encode($res);	
 		}
 	

@@ -37,7 +37,7 @@ function getNext(topic, course, index){
         console.log(data);
         if(data.status === "success"){
             let content = data.data;
-          
+            
             window.location.assign('class.php?topic_id='+content.topic_id+'&c_index='+content.c_index);
 
         }

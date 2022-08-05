@@ -32,10 +32,19 @@ function submit(answers, topic){
         }
     })
     .done(function(res){
+<<<<<<< HEAD
         let data = JSON.parse(res);
         console.log(data);
         if(data.status === "success"){
             showQuiz(data.data);
+=======
+        $("#submit").removeAttr("disabled");
+
+        let data = JSON.parse(res);
+        console.log(data);
+        if(data.status === "success"){
+            window.location.replace('quiz_end.php?topic='+data.topic+'&student='+data.student);
+>>>>>>> 2ff717242918146820968b2f0e6dd1606f95c20d
         }
     })
 }
