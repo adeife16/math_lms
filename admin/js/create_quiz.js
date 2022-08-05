@@ -1,4 +1,4 @@
-// get current topic id, quiz and course
+ 	// get current topic id, quiz and course
 var url = window.location.href;
 url = url.split('?');
 url = url[1].split('&');

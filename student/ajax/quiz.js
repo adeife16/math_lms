@@ -1,3 +1,4 @@
+// get quiz questions
 function getQuiz(topic){
     $.ajax({
         type: 'GET',
@@ -5,6 +6,29 @@ function getQuiz(topic){
         cache: false,
         beforeSend: function(){
 
+        }
+    })
+    .done(function(res){
+        let data = JSON.parse(res);
+        console.log(data);
+        if(data.status === "success"){
+            showQuiz(data.data);
+        }
+    })
+}
+
+// submit quiz
+function submit(answers, topic){
+    $.ajax({
+        type: 'POST',
+        url: 'backend/quiz.php',
+        data: {
+            submit: answers,
+            topic: topic
+        },
+        cache: false,
+        beforeSend: function(){
+            $("#submit").attr("disabled", "disabled");
         }
     })
     .done(function(res){

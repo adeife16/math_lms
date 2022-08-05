@@ -22091,6 +22091,12 @@ fieldset[disabled][disabled] .dark-edition .has-error .form-control,
 .borderbottom-red{
   border-bottom:  1px solid #ff0000;
 }
+.dark{
+  background: #1a2035 !important;
+}
+.color-dark{
+  color: #1a2035 !important;
+}
 
 
 
